@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignUpRequest;
 use App\User;
-
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Mail;
 
 class AuthController extends Controller
 {
@@ -39,9 +41,27 @@ class AuthController extends Controller
     public function signup(SignUpRequest $request)
     {
         User::create($request->all());
-        return $this->login($request);
+        $Email=$request->email;
+        //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        //$out->writeln($request->email);
+        //dd($Email);
+        
+        
+        //return redirect("http://127.0.0.1:8000/email")->compact('Email');
+        Mail::send('email', [], function($message){
+            $message->from('Administracion@gmail.com', 'Gabriel QA');
+            $message->to('gabrielqqquesada@gmail.com','GabrielQuesada')->subject('Verfique su cuenta');
+        });
+
+        
+        
+
+       
     }
 
+    public function email_verification(){
+
+    }
     /**
      * Get the authenticated User.
      *
@@ -74,6 +94,14 @@ class AuthController extends Controller
         return $this->respondWithToken(auth()->refresh());
     }
 
+    public function email(){
+
+        Mail::send('email', [], function($message){
+            $message->from('Administracion@gmail.com', 'Gabriel QA');
+            $message->to('gabrielqqquesada@gmail.com','GabrielQuesada')->subject('Verfique su cuenta');
+        });
+    
+    }
     /**
      * Get the token array structure.
      *
@@ -90,4 +118,6 @@ class AuthController extends Controller
             'user' => auth()->user()->name
         ]);
     }
+
+    
 }
