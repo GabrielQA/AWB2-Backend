@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Mail;
+use Session;
 
 class AuthController extends Controller
 {
@@ -40,21 +41,31 @@ class AuthController extends Controller
 
     public function signup(SignUpRequest $request)
     {
-        User::create($request->all());
         $Email=$request->email;
-        //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        //$out->writeln($request->email);
-        //dd($Email);
-        
-        
-        //return redirect("http://127.0.0.1:8000/email")->compact('Email');
-        Mail::send('email', [], function($message){
-            $message->from('Administracion@gmail.com', 'Gabriel QA');
-            $message->to('gabrielqqquesada@gmail.com','GabrielQuesada')->subject('Verfique su cuenta');
-        });
+        /*session_start();
+        session()->regenerate();
+       
 
+        session(['123' => $Email]);
+       
+        User::create($request->all());*/
+     
         
         
+        $Age=$request->birthdate;
+       
+        dd($Age);
+        //Email envio
+        /*Mail::send('email', [], function($message){
+            $value = session('123');
+           
+            $message->from('Administracion@gmail.com', 'Gabriel QA');
+            $message->to($value,'GabrielQuesada')->subject('Verfique su cuenta');
+        });*/
+
+
+       //Ejemplo de enviar a otra ruta por el controlador
+       //return redirect("http://127.0.0.1:8000/email")->compact('Email');
 
        
     }
