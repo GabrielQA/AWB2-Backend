@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Mail;
 use Session;
+use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
@@ -41,27 +42,27 @@ class AuthController extends Controller
 
     public function signup(SignUpRequest $request)
     {
+
         $Email=$request->email;
-        /*session_start();
+        session_start();
         session()->regenerate();
-       
+        Cache::put('key', $Email);
 
         session(['123' => $Email]);
-       
-        User::create($request->all());*/
+
+        User::create($request->all());
      
         
         
-        $Age=$request->birthdate;
+       // $Age=$request->birthdate;
        
-        dd($Age);
+        //dd($Age);
         //Email envio
-        /*Mail::send('email', [], function($message){
+        Mail::send('email', [], function($message){
             $value = session('123');
-           
             $message->from('Administracion@gmail.com', 'Gabriel QA');
             $message->to($value,'GabrielQuesada')->subject('Verfique su cuenta');
-        });*/
+        });
 
 
        //Ejemplo de enviar a otra ruta por el controlador
@@ -70,7 +71,9 @@ class AuthController extends Controller
        
     }
 
-    public function email_verification(){
+    public function email_verificate(){
+        
+       return redirect("http://127.0.0.1:8000/email_verification");
 
     }
     /**
