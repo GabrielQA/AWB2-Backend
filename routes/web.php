@@ -21,7 +21,12 @@ Route::get('/email_verification', function () {
 });
     //Route::get('email', 'AuthController@email');
 
+    Route::get('sms', 'PhoneVerificationController@codigo');
+
     Route::get('email', 'verification@email');
+    Route::get('phone', 'PhoneVerificationController@startVerification');
+   //Route::post('verify', 'PhoneVerificationController@codigo');
+   Route::get('verify', 'AuthController@validation');
 
 
 /*Route::get('email', function () {

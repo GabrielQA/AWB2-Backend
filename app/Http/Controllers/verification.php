@@ -26,10 +26,10 @@ class verification extends Controller
     $conexion = new PDO("mysql:host=localhost;dbname=proyectoawb2","root","");
     $sql = "UPDATE users SET verification = true WHERE email = '$value';";
     $conexion->query($sql);
-
+        
 
         //Cache::delete();
-        return redirect("http://127.0.0.1:8000/email_verification");
+        return redirect("http://localhost:4200/email_verification");
  
      }
 

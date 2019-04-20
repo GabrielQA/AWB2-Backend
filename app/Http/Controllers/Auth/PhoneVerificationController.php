@@ -1,21 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use \Exception;
-use Session;
 use App\Http\Controllers\Controller;
 use Authy\AuthyApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Response;
-use PDO;
-use App\User;
-use App\Http\Requests\SignUpRequest;
-
 
 class PhoneVerificationController extends Controller
 {
@@ -64,7 +56,7 @@ class PhoneVerificationController extends Controller
         return Validator::make($data, [
             'country_code' => 'required|string|max:3',
             'phone_number' => 'required|string|max:10',
-            'token' => 'required|string|max:4'
+            'token' => 'required|string|max:10'
         ]);
     }
 
@@ -74,31 +66,26 @@ class PhoneVerificationController extends Controller
      * @param  array  $data
      * @return Illuminate\Support\Facades\Response;
      */
-    public function phone(){
-       
-    }
     protected function startVerification(
         Request $request,
         AuthyApi $authyApi
     ) {
-            session_start();
-
-
-        /*$data = $request->all();
+        $data = $request->all();
         $validator = $this->verificationRequestValidator($data);
-        extract($data);*/
-        $value = Cache::get('kayn');
-        $country_code='506';
-        $phone_number=$value; 
-        $via="sms";
-    
-           //Aqui enviamos el sms
-            $response = $authyApi->phoneVerificationStart($phone_number, $country_code, $via);
- 
+        extract($data);
 
-            //return redirect("http://localhost:4200/");
-            
+        if ($validator->passes()) {
+            $response = $authyApi->phoneVerificationStart($phone_number, $country_code, $via);
+            if ($response->ok()) {
+                return response()->json($response->message(), 200);
+            } else {
+                return response()->json((array)$response->errors(), 400);
+            }
+        }
+
+        return response()->json(['errors'=>$validator->errors()], 403);
     }
+
     /**
      * Request phone verification via PhoneVerificationService.
      *
@@ -125,6 +112,7 @@ class PhoneVerificationController extends Controller
                 return response()->json($response, 403);
             }
         }
+
         return response()->json(['errors'=>$validator->errors()], 403);
     }
 }
