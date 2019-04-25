@@ -8,6 +8,17 @@ Route::group([
     });
     Route::post('login', 'AuthController@login');
     Route::post('validation', 'AuthController@login');
+    //CRUD USUARIOS
+    Route::post('create_users', 'AuthController@create_users');
+    Route::get('userskids', 'AuthController@userskids');
+    Route::post('modusers', 'AuthController@modusers');
+    Route::post('deleteusers', 'AuthController@deleteusers');
+    //CRUD VIDEOS
+    Route::get('create_videos', 'AuthController@create_videos');
+    Route::post('viewvideos', 'AuthController@viewvideos');
+    Route::post('modvideos', 'AuthController@modvideos');
+    Route::post('deletevideos', 'AuthController@deletevideos');
+    //Registrar Usuarios corrientes
     Route::post('signup', 'AuthController@signup');
     //Route::get('email', 'AuthController@email');
     Route::post('logout', 'AuthController@logout');

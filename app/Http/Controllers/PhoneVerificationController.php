@@ -1,20 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use \Exception;
-use Session;
-use App\Http\Controllers\Controller;
 use Authy\AuthyApi;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Response;
-use PDO;
-use App\User;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SignUpRequest;
+use App\Http\Requests\SignUpKids;
+use App\Http\Requests\SignUpVideos;
+use App\User;
+use App\UsersKids;
+use App\Videos;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Mail;
+use Session;
+use Illuminate\Support\Facades\Cache;
+use PDO;
 
 
 class PhoneVerificationController extends Controller
@@ -76,6 +77,37 @@ class PhoneVerificationController extends Controller
      */
     public function phone(){
        
+    }
+    public function viewUsers(){
+        $Father = Cache::get('father');  
+        //La #1      
+        //Normalito
+        /*$conexion = new PDO("mysql:host=localhost;dbname=pawb2","root","");
+        $sql = "SELECT name,username,birthdate FROM userskids WHERE id_father = '$Father';";
+        $info2 = $conexion->prepare($sql); 
+        $info2->execute();
+        $telephone = $info2->fetch();
+        dd($telephone);*/
+        //return response()->json($telephone);
+
+
+        //La #2
+        // JWT
+        dd(response()->json(['details'=> UsersKids::all()], 200));
+         return response()->json(['details'=> UsersKids::all()], 200);
+       
+       /* OR
+        $tasks = Tasks::all();
+        return $tasks;*/
+       
+        //La #3
+        //Basic Auth
+        //return response()->json(['details'=> UsersKids::all()], 200);
+
+        /*La #4
+        Normal
+        $student = UsersKids::find($id);
+        return response()->json($student);*/
     }
     protected function startVerification(
         Request $request,

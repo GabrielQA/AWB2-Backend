@@ -23,7 +23,7 @@ class verification extends Controller
         //dd($value);
         $verification = "true";
 
-    $conexion = new PDO("mysql:host=localhost;dbname=proyectoawb2","root","");
+    $conexion = new PDO("mysql:host=localhost;dbname=pawb2","root","");
     $sql = "UPDATE users SET verification = true WHERE email = '$value';";
     $conexion->query($sql);
         

@@ -15,7 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::get('/email_verification', function () {
     return view('email_verification');
 });
@@ -62,3 +61,5 @@ Route::get('email_verification', function () {
 
 
 });*/
+
+Route::get('userskids', 'AuthController@userskids');
