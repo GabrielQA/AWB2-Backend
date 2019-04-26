@@ -11,13 +11,14 @@ Route::group([
     //CRUD USUARIOS
     Route::post('create_users', 'AuthController@create_users');
     Route::get('userskids', 'AuthController@userskids');
-    Route::post('modusers', 'AuthController@modusers');
-    Route::post('deleteusers', 'AuthController@deleteusers');
+    Route::put('modusers', 'AuthController@modusers');
+    Route::delete('deleteusers/{id}', 'AuthController@deleteusers');
     //CRUD VIDEOS
-    Route::get('create_videos', 'AuthController@create_videos');
-    Route::post('viewvideos', 'AuthController@viewvideos');
-    Route::post('modvideos', 'AuthController@modvideos');
-    Route::post('deletevideos', 'AuthController@deletevideos');
+    Route::post('create_videos', 'AuthController@create_videos');
+    Route::get('videos', 'AuthController@videos');
+    Route::put('modvideos', 'AuthController@modvideos');
+    Route::delete('deletevideos/{id}', 'AuthController@deletevideos');
+    Route::post('seachvideo', 'AuthController@seachvideo');
     //Registrar Usuarios corrientes
     Route::post('signup', 'AuthController@signup');
     //Route::get('email', 'AuthController@email');

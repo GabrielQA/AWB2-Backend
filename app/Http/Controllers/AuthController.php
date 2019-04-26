@@ -29,7 +29,9 @@ class AuthController extends Controller
     public function __construct()
     {
         
-        $this->middleware('auth:api', ['except' => ['login', 'signup','create_users','create_videos','userskids']]);
+        $this->middleware('auth:api', ['except' => ['login', 'signup','create_users','create_videos','userskids',
+        'videos','modvideos',
+        'deletevideos','modusers','deleteusers','seachvideo']]);
         $this->middleware('guest');
     }
 
@@ -90,7 +92,6 @@ class AuthController extends Controller
         if($Validation == 0){
             return response()->json(['error' => 'This Email need verification'], 401);
         }else{
-            //$conexion = new PDO("mysql:host=localhost;dbname=proyectoawb2","root","");
             $sql = "SELECT telephone FROM users WHERE email = '$Email';";
             $info2 = $conexion->prepare($sql); 
             $info2->execute();
@@ -101,11 +102,11 @@ class AuthController extends Controller
             $via="sms";
     
            //Aqui enviamos el sms
-            //$response = $authyApi->phoneVerificationStart($phone_number, $country_code, $via);
+            $response = $authyApi->phoneVerificationStart($phone_number, $country_code, $via);
             //return redirect("http://127.0.0.1:8000/phone");
 
 
-            //AQUI SE LOGUEA Y MANDA todo
+            //AQUI SE LOGUEA Y MANDA LA INFO
             return $this->respondWithToken($token);
         }       
 
@@ -137,6 +138,7 @@ class AuthController extends Controller
 
        
     }
+    //CRUD USERS KIDS
     public function create_users(SignUpKids $request){
 
         $conexion = new PDO("mysql:host=localhost;dbname=pawb2","root","");
@@ -150,99 +152,54 @@ class AuthController extends Controller
         $verification = $info2->fetch();
         
     }
+    //Function view UsersKids 
     public function userskids(){
-        $Father = Cache::get('father');  
+        
+         return response()->json(UsersKids::all(), 200);
        
-        //La #1      
-        //Normalito
-         //dd(response()->json(['details'=> UsersKids::all()], 200));
-         return response()->json(['details'=> UsersKids::all()], 200);
-       
-        //return response()->json($telephone);
-
-
-        //La #2
-        // JWT
-        /*$ViewKids = UsersKids::find($Father);
-        return $ViewKids;
-        OR
-        $tasks = Tasks::all();
-        return $tasks;*/
-       
-        //La #3
-        //Basic Auth
-        //return response()->json(['details'=> UsersKids::all()], 200);
-
-        /*La #4
-        Normal
-        $student = UsersKids::find($id);
-        return response()->json($student);*/
     }
-    public function modusers(){
-        /*
-        #1 Basic Auth
-        $task = $this->get($id);
-        $task->fill($request->all())->save();
-        return $task;
-        */
-        /*
-        $student = UsersKids::find($id);
-        $student->firstname = $request->input('firstname');
-        $student->lastname = $request->input('lastname');
-        $student->email = $request->input('email');
-        $student->address = $request->input('address');
-        $student->save();
-        return response()->json(['details'=> Students::all()], 200);
-        */
-        /*
-        #2
-        $categoria = Categoria::find($id);
-
-        $categoria->nombre = Input::get('nombre');
-        $categoria->categoria_padre = Input::get('categoriaPadre');
-
-        if ($categoria->save()) {
-            Session::flash('message', 'Categoria actualizada correctamente');
-            Session::flash('class', 'success');
-        }
-        else{
-            Session::flash('message', 'Ha ocurrido un error');
-            Session::flash('class', 'danger');
-        }
-        return Redirect::to('categories/index');
-        */
+    //Function Modify Userskids
+    public function modusers(Request $request){
+    
+        $UsersKids = userskids::find($request->id)->update($request->all());
+        return response()->json($UsersKids, 200);
     }
-    public function deleteusers(){
-       /* 
-        #1 Basic Auth
-        $student = Students::find($id);
-        $student->delete();
-        return response()->json(['details'=> Students::all()], 200);*/
+    //Function Delete UsersKids
+    public function deleteusers($id){
+        $UsersKids = userskids::find($id)->delete();
+        return response()->json(null, 204);
     }
+
+    //CRUD VIDEOS
+    //Function create videos
     public function create_videos(SignUpVideos $request){
 
         $Father = Cache::get('father');
         $request['id_father'] = $Father;
         $UsersKids = Videos::create($request->all());
-
-
-        /*$sql = "INSERT INTO videos (id_father,name,link) VALUES ('$request->name',$Father[0],'$request->link')";
-        $info2 = $conexion->prepare($sql); 
-        $info2->execute();
-        $verification = $info2->fetch();*/
     }
-    public function viewvideos(){
-        
+    //Fuction view videos
+    public function videos(){
+        return response()->json(Videos::all(), 200);
     }
-    public function modvideos(){
-        
+    //Function search videos
+    public function seachvideo(Request $request){
+        $data=Videos::Where('name','LIKE',"%$request->name%")->get();
+        return response()->json($data, 200);
     }
-    public function deletevideos(){
-        
+    //Function Modify Videos
+    public function modvideos(Request $request){
+        $UsersKids = userskids::find($request->id)->update($request->all());
+        return response()->json($UsersKids, 200);
+    }
+    //Function delete videos
+    public function deletevideos($id){
+        $video = videos::find($id)->delete();
+        return response()->json(null, 204);
     }
     
 
-   
+   //Others validations
     public function validation(Request $request){
         
         dd($request->all());
